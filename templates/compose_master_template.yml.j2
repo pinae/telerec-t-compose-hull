@@ -36,7 +36,10 @@ x-networks: &base_networks
 # The main Docker Compose file
 {{ lookup('template', 'docker-compose.yml.j2') }}
 
+{% if service_cfg.skip_network_definition is not defined or service_cfg.skip_network_definition == false %}
 # Access the traefik-network
 networks:
   traefik_net:
-    external: true
+    external:
+      name: traefik_default
+{% endif %}
