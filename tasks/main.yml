@@ -1,0 +1,8 @@
+- include_tasks: facts.yml
+  tags: [ always ]
+
+- include_tasks: create_directories.yml
+  tags: [ always ]
+
+- include_tasks: deploy_docker.yml
+  tags: [ always ]
