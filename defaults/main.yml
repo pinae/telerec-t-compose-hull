@@ -13,3 +13,4 @@ service_base_defaults:
   watchtower: false
   autoheal: false
   subdirs: []
+  skip_network_definition: false
