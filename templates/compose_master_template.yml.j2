@@ -7,7 +7,7 @@
 x-labels: &base_labels
 {% if service_cfg.traefik == true %}
       traefik.enable: "true"
-      traefik.docker.network: "traefik_net"
+      traefik.docker.network: "traefik_default"
       traefik.http.services.{{ service_cfg.name }}.loadbalancer.server.port: "{{ service_cfg.port }}"
       traefik.http.routers.{{ service_cfg.name }}_web.EntryPoints: "web-secure"
       traefik.http.routers.{{ service_cfg.name }}_web.rule: "Host(`{{ service_cfg.domain }}`)"
