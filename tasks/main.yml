@@ -1,3 +1,6 @@
+- include_tasks: user_info.yml
+  tags: [ always ]
+
 - include_tasks: facts.yml
   tags: [ always ]
 
