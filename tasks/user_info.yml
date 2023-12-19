@@ -7,9 +7,11 @@
       with_items: [{"db": "passwd", "key": "{{ admin.name }}"}, {"db": "group", "key": "docker"}]
 
     - name: "Store User ID: {{ ansible_facts.getent_passwd[vars.admin.name].1 }}"
-      set_fact: PUID=ansible_facts.getent_passwd[vars.admin.name].1
+      set_fact:
+        PUID: "{{ ansible_facts.getent_passwd[vars.admin.name].1 }}"
       tags: [ always, started, restarted, recreated ]
 
     - name: "Store Goup ID of docker: {{ ansible_facts.getent_group['docker'].1 }}"
-      set_fact: PGID=ansible_facts.getent_group["docker"].1
+      set_fact:
+        PGID: "{{ ansible_facts.getent_group['docker'].1 }}"
       tags: [ always, started, restarted, recreated ]
