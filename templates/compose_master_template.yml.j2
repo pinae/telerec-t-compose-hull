@@ -15,7 +15,7 @@ x-labels: &base_labels
       traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "internal-ips-only@file"
 {% endif %}
       traefik.http.routers.{{ service_cfg.name }}_web.service: "{{ service_cfg.name }}"
-      traefik.http.routers.{{ service_cfg.name }}_web.tls: "true"
+      traefik.http.routers.{{ service_cfg.name }}_web.tls: true
       traefik.http.routers.{{ service_cfg.name }}_web.tls.certresolver: "default"
 {% endif %}
 {% if service_cfg.watchtower is defined and service_cfg.watchtower == true %}
