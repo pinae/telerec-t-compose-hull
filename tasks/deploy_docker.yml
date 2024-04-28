@@ -7,15 +7,28 @@
     group: docker
   tags: [ always ]
 
+- name: Validate compose file
+  ansible.builtin.command:
+    cmd: docker compose --file docker-compose.yml config --quiet
+    chdir: "{{ service_cfg.directory }}"
+  changed_when: false
 
+- name: Pull container images
+  community.docker.docker_compose_v2_pull:
+    project_src: "{{ service_cfg.directory }}"
 
-- name: "{{ docker_compose_params.command }}: docker compose '{{ service_cfg.name }}/docker-compose.yml'"
-  community.docker.docker_compose:
+- name: Create containers
+  ansible.builtin.command:
+    cmd: docker compose --ansi never --progress plain --file docker-compose.yml create
+    chdir: "{{ service_cfg.directory }}"
+  register: temp_compose_create
+  changed_when: "'Created' in temp_compose_create.stdout"
+
+- name: Start containers
+  community.docker.docker_compose_v2:
     project_name: "{{ service_cfg.name }}"
     project_src: "{{ service_cfg.directory }}"
     state: "{{ docker_compose_params.state }}"
-    restarted: "{{ docker_compose_params.restarted }}"
-    stopped: "{{ docker_compose_params.stopped }}"
     recreate: "{{ docker_compose_params.recreate }}"
     remove_orphans: "{{ docker_compose_params.remove_orphans }}"
     remove_volumes: "{{ docker_compose_params.remove_volumes }}"

@@ -1,9 +1,7 @@
 docker_compose_params:
   command: "STARTED"
   state: present
-  restarted: false
-  stopped: false
-  recreate: smart
+  recreate: never
   remove_orphans: false
   remove_volumes: false
 
