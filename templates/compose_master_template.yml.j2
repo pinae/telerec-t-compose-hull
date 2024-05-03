@@ -9,7 +9,7 @@ x-labels: &base_labels
       traefik.enable: "true"
       traefik.docker.network: "traefik_default"
       traefik.http.services.{{ service_cfg.name }}.loadbalancer.server.port: "{{ service_cfg.port }}"
-      traefik.http.routers.{{ service_cfg.name }}_web.EntryPoints: "web-secure"
+      traefik.http.routers.{{ service_cfg.name }}_web.EntryPoints: "{{ service_cfg.router_entry_point }}"
 {% if service_cfg.url_path_prefix is defined and service_cfg.url_path_prefix|length %}
       traefik.http.routers.{{ service_cfg.name }}_web.rule: "Host(`{{ service_cfg.domain }}`) && PathPrefix(`{{ service_cfg.url_path_prefix }}`)"
 {% else %}

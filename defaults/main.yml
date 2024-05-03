@@ -10,5 +10,6 @@ service_base_defaults:
   external: false
   watchtower: false
   autoheal: false
+  router_entry_point: "web-secure"
   subdirs: []
   skip_network_definition: false

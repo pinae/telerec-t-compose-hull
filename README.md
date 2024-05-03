@@ -22,6 +22,8 @@ merges variables from four sources:
  * `traefik`: whether to use traefik
  * `watchtower`: whether to use watchtower
  * `autoheal`: whether to use autoheal
+ * `router_entry_point`: a traefik label selecting either `web-secure` (default, TLS port 443) or `web` (insecure HTTP port 80) 
+ * `url_path_prefix`: if supplied traefik matches the given path prefix in the URL (the web service has to support the URL with this path)
 
 
 ## Tags
