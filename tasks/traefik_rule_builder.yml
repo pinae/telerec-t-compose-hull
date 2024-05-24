@@ -1,4 +1,4 @@
-- name: Create lists for Traefik rules and middlewares
+- name: Create lists for Traefik rules
   ansible.builtin.set_fact:
     traefik_rules: []
     internal_ip_rules: []

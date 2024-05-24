@@ -1,0 +1,37 @@
+- name: Create lists for Traefik rules and middlewares
+  ansible.builtin.set_fact:
+    traefik_middlewares: []
+    traefik_middleware_config_lines: []
+- name: Append the internal IP middleware
+  ansible.builtin.set_fact:
+    traefik_middlewares: "{{ traefik_middlewares + [ 'internal-ips-only@file' ] }}"
+  when:
+    not (middleware_builder_config.external | default(true))
+- name: Create stripprefix middleware name
+  ansible.builtin.set_fact:
+    stripprefix_name: "{{ middleware_builder_config.name }}_stripprefix"
+  when:
+    (middleware_builder_config.stripprefix | default(false)) and (middleware_builder_config.url_path_prefix | length > 0)
+- name: "Make the {{ stripprefix_name }} config line"
+  ansible.builtin.set_fact:
+    stripprefix_config_line: "traefik.http.middlewares.{{ stripprefix_name }}.stripprefix.prefixes: \"{{ middleware_builder_config.url_path_prefix }}\""
+  when:
+    (middleware_builder_config.stripprefix | default(false)) and (middleware_builder_config.url_path_prefix | length > 0)
+- name: "Append the {{ stripprefix_name }} middleware config"
+  ansible.builtin.set_fact:
+    traefik_middleware_config_lines: "{{ traefik_middleware_config_lines + [ stripprefix_config_line ] }}"
+  when:
+    (middleware_builder_config.stripprefix | default(false)) and (middleware_builder_config.url_path_prefix | length > 0)
+- name: "Append the {{ stripprefix_name }} middleware"
+  ansible.builtin.set_fact:
+    traefik_middlewares: "{{ traefik_middlewares + [ stripprefix_name ] }}"
+  when:
+    (middleware_builder_config.stripprefix | default(false)) and (middleware_builder_config.url_path_prefix | length > 0)
+- name: Construct middleware list string
+  ansible.builtin.set_fact:
+    traefik_middleware_list: "{{ traefik_middlewares | join(',') }}"
+
+- debug:
+    msg: "{{ stripprefix_config_line }}"
+- debug:
+    msg: "{{ traefik_middleware_config_lines }}"

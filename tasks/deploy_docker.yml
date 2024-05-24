@@ -11,6 +11,16 @@
   ansible.builtin.set_fact:
     traefik_web_rule: "{{ traefik_rule }}"
 
+- name: Gather Traefik middleware info
+  include_tasks: traefik_middleware_builder.yml
+  with_items:
+    - external: "{{ service_cfg.external | default(true) }}"
+      name: "{{ service_cfg.name | default('default') }}"
+      url_path_prefix: "{{ service_cfg.url_path_prefix | default('') }}"
+      stripprefix: "{{ service_cfg.stripprefix | default(false) }}"
+  loop_control:
+    loop_var: middleware_builder_config
+
 - name: Generate Compose File
   template:
     src: compose_master_template.yml.j2

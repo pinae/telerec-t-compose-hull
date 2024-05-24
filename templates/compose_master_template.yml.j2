@@ -13,8 +13,11 @@ x-labels: &base_labels
 {% if traefik_web_rule is defined %}
       traefik.http.routers.{{ service_cfg.name }}_web.rule: "{{ traefik_web_rule }}"
 {% endif %}
-{% if service_cfg.external is not defined or service_cfg.external == false %}
-      traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "internal-ips-only@file"
+{% for middleware_config_line in traefik_middleware_config_lines %}
+      {{ middleware_config_line }}
+{% endfor %}
+{% if traefik_middlewares | length > 0 %}
+      traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "{{ traefik_middleware_list }}"
 {% endif %}
       traefik.http.routers.{{ service_cfg.name }}_web.service: "{{ service_cfg.name }}"
       traefik.http.routers.{{ service_cfg.name }}_web.tls: true
