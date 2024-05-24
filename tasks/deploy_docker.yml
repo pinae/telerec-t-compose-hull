@@ -1,8 +1,15 @@
+- name: Build Traefik rule
+  include_tasks: traefik_rule_builder.yml
+  with_items:
+    - domain: "{{ service_cfg.domain | default('') }}"
+      url_path_prefix: "{{ service_cfg.url_path_prefix | default('') }}"
+      external: "{{ service_cfg.external | default(true) }}"
+  loop_control:
+    loop_var: rule_builder_config
+
 - name: Generate Rule String for Traefik
   ansible.builtin.set_fact:
-    #traefik_web_rule: "Host(`{{ service_cfg.domain }}`){% if service_cfg.url_path_prefix is defined and service_cfg.url_path_prefix|length %} && PathPrefix(`{{ service_cfg.url_path_prefix }}`){% endif %}{% if service_cfg.external is not defined or service_cfg.external == false %} && (ClientIP(`192.168.0.0/16`) || ClientIP(`10.0.0.0/8`) || ClientIP(`172.16.0.0/16`) || ClientIP(`172.17.0.0/16`) || ClientIP(`172.18.0.0/16`) || ClientIP(`172.19.0.0/16`) || ClientIP(`172.20.0.0/16`) || ClientIP(`172.21.0.0/16`) || ClientIP(`172.22.0.0/16`) || ClientIP(`172.23.0.0/16`) || ClientIP(`172.24.0.0/16`) || ClientIP(`172.25.0.0/16`) || ClientIP(`172.26.0.0/16`) || ClientIP(`172.27.0.0/16`) || ClientIP(`172.28.0.0/16`) || ClientIP(`172.29.0.0/16`) || ClientIP(`172.30.0.0/16`) || ClientIP(`172.31.0.0/16`)){% endif %}"
-    traefik_web_rule: "Host(`{{ service_cfg.domain }}`){% if service_cfg.url_path_prefix is defined and service_cfg.url_path_prefix|length %} && PathPrefix(`{{ service_cfg.url_path_prefix }}`){% endif %}{% if service_cfg.external is not defined or service_cfg.external == false %} && ClientIP(`192.168.111.245`){% endif %}"
-  tags: [ always ]
+    traefik_web_rule: "{{ traefik_rule }}"
 
 - name: Generate Compose File
   template:
