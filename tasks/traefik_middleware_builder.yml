@@ -30,8 +30,3 @@
 - name: Construct middleware list string
   ansible.builtin.set_fact:
     traefik_middleware_list: "{{ traefik_middlewares | join(',') }}"
-
-- debug:
-    msg: "{{ stripprefix_config_line }}"
-- debug:
-    msg: "{{ traefik_middleware_config_lines }}"
