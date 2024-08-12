@@ -1,4 +1,3 @@
-
 - name: "Merge service config and service defaults"
   ansible.builtin.set_fact:
     # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/combine_filter.html
@@ -8,11 +7,8 @@
 - name: Set compose parameters according to "restarted" tag
   ansible.builtin.set_fact:
     docker_compose_params:
-      command: "RESTARTED"
-      restarted: true
-      state: present
-      stopped: false
-      recreate: smart
+      state: restarted
+      recreate: auto
       remove_orphans: false
       remove_volumes: false
   tags: [ never, restarted ]
@@ -20,11 +16,8 @@
 - name: Set compose parameters according to "stopped" tag
   ansible.builtin.set_fact:
     docker_compose_params:
-      command: "STOPPED"
-      state: present
-      restarted: false
-      stopped: true
-      recreate: smart
+      state: stopped
+      recreate: never
       remove_orphans: false
       remove_volumes: false
   tags: [ never, stopped ]
@@ -32,10 +25,7 @@
 - name: Set compose parameters according to "recreated" tag
   ansible.builtin.set_fact:
     docker_compose_params:
-      command: "RECREATED"
       state: present
-      restarted: false
-      stopped: false
       recreate: always
       remove_orphans: false
       remove_volumes: false
@@ -44,11 +34,8 @@
 - name: Set compose parameters according to "absent" tag
   ansible.builtin.set_fact:
     docker_compose_params:
-      command: "ABSENT"
       state: absent
-      restarted: false
-      stopped: false
-      recreate: smart
+      recreate: auto
       remove_orphans: true
       remove_volumes: true
   tags: [ never, absent ]

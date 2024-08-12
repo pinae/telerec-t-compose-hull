@@ -26,8 +26,18 @@
     src: compose_master_template.yml.j2
     dest: "{{ service_cfg.directory }}/docker-compose.yml"
     owner: "{{ service_cfg.owner }}"
-    group: docker
+    group: "{{ service_cfg.group }}"
   tags: [ always ]
+
+- name: Generate .env File
+  template:
+    src: .env.j2
+    dest: "{{ service_cfg.directory }}/.env"
+    owner: "{{ service_cfg.owner }}"
+    group: "{{ service_cfg.group }}"
+  tags: [ always ]
+  when: service_cfg.env
+
 
 - name: Validate compose file
   ansible.builtin.command:
@@ -48,7 +58,7 @@
 
 - name: Start containers
   community.docker.docker_compose_v2:
-    #project_name: "{{ service_cfg.name }}"
+    project_name: "{{ service_cfg.name }}"
     project_src: "{{ service_cfg.directory }}"
     state: "{{ docker_compose_params.state }}"
     recreate: "{{ docker_compose_params.recreate }}"

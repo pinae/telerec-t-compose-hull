@@ -1,17 +1,18 @@
-- name: "Get the ID of {{ admin.name }} and the ID of the group docker."
+- name: "Get the ID of {{ service_cfg.owner }} and the ID of the group {{ service_cfg.group }}."
   block:
-    - name: "Get the ID of {{ admin.name }} and the ID of the group docker."
+    - name: "Get the ID of {{ service_cfg.owner }} and the ID of the group docker."
       ansible.builtin.getent:
         database: "{{ item.db }}"
         key: "{{ item.key }}"
-      with_items: [{"db": "passwd", "key": "{{ admin.name }}"}, {"db": "group", "key": "docker"}]
+      with_items: [{"db": "passwd", "key": "{{ service_cfg.owner }}"}, {"db": "group", "key": "{{ service_cfg.group }}"}]
+      tags: [ always ]
 
-    - name: "Store User ID: {{ ansible_facts.getent_passwd[vars.admin.name].1 }}"
+    - name: "Store User ID: {{ ansible_facts.getent_passwd[vars.service_cfg.owner].1 }}"
       set_fact:
-        PUID: "{{ ansible_facts.getent_passwd[vars.admin.name].1 }}"
-      tags: [ always, started, restarted, recreated ]
+        PUID: "{{ ansible_facts.getent_passwd[vars.service_cfg.owner].1 }}"
+      tags: [ always ]
 
-    - name: "Store Goup ID of docker: {{ ansible_facts.getent_group['docker'].1 }}"
+    - name: "Store Goup ID of docker: {{ ansible_facts.getent_group[vars.service_cfg.group].1 }}"
       set_fact:
-        PGID: "{{ ansible_facts.getent_group['docker'].1 }}"
-      tags: [ always, started, restarted, recreated ]
+        PGID: "{{ ansible_facts.getent_group[vars.service_cfg.group].1 }}"
+      tags: [ always ]

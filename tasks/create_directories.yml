@@ -4,7 +4,7 @@
     path: "{{ (service_cfg.directory, item) | path_join }}"
     state: directory
     owner: "{{ service_cfg.owner }}"
-    group: docker
+    group: "{{ service_cfg.group }}"
     mode: "775"
   with_items: "{{ [''] + service_cfg.subdirs }}"
   tags: [ always ]

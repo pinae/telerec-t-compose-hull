@@ -1,7 +1,7 @@
-- include_tasks: user_info.yml
+- include_tasks: facts.yml
   tags: [ always ]
 
-- include_tasks: facts.yml
+- include_tasks: user_info.yml
   tags: [ always ]
 
 - include_tasks: create_directories.yml
