@@ -9,14 +9,6 @@ x-labels: &base_labels
       traefik.enable: true
       traefik.http.services.{{ service_cfg.name }}.loadbalancer.server.port: "{{ service_cfg.port }}"
       traefik.http.routers.{{ service_cfg.name }}_web.EntryPoints: "{{ service_cfg.router_entry_point }}"
-{% if service_cfg.url_path_prefix is defined and service_cfg.url_path_prefix|length %}
-      traefik.http.routers.{{ service_cfg.name }}_web.rule: "Host(`{{ service_cfg.domain }}`) && PathPrefix(`{{ service_cfg.url_path_prefix }}`)"
-{% else %}
-      traefik.http.routers.{{ service_cfg.name }}_web.rule: "Host(`{{ service_cfg.domain }}`)"
-{% endif %}
-{% if service_cfg.external is not defined or service_cfg.external == false %}
-      traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "internal-ips-only@file"
-      traefik.http.routers.{{ service_cfg.name }}_web.EntryPoints: "{{ service_cfg.router_entry_point }}"
 {% if traefik_web_rule is defined %}
       traefik.http.routers.{{ service_cfg.name }}_web.rule: "{{ traefik_web_rule }}"
 {% endif %}
