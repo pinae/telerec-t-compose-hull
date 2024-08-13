@@ -9,14 +9,14 @@ x-labels: &base_labels
       traefik.enable: true
       traefik.http.services.{{ service_cfg.name }}.loadbalancer.server.port: "{{ service_cfg.port }}"
       traefik.http.routers.{{ service_cfg.name }}_web.EntryPoints: "{{ service_cfg.router_entry_point }}"
-{% if traefik_web_rule is defined %}
-      traefik.http.routers.{{ service_cfg.name }}_web.rule: "{{ traefik_web_rule }}"
+{% if traefik_info.domain_rule is defined %}
+      traefik.http.routers.{{ service_cfg.name }}_web.rule: "{{ traefik_info.domain_rule }}"
 {% endif %}
-{% for middleware_config_line in traefik_middleware_config_lines %}
+{% for middleware_config_line in traefik_info.middleware_config_lines %}
       {{ middleware_config_line }}
 {% endfor %}
-{% if traefik_middlewares | length > 0 %}
-      traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "{{ traefik_middleware_list }}"
+{% if traefik_info.middlewares | length > 0 %}
+      traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "{{ traefik_info.middlewares }}"
 {% endif %}
       traefik.http.routers.{{ service_cfg.name }}_web.service: "{{ service_cfg.name }}"
       traefik.http.routers.{{ service_cfg.name }}_web.tls: true
