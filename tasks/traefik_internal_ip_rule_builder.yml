@@ -1,4 +1,0 @@
-- ansible.builtin.set_fact:
-    internal_range_rule: "ClientIP(`{{ ip }}`)"
-- ansible.builtin.set_fact:
-    internal_ip_rules: "{{ internal_ip_rules + [ internal_range_rule ] }}"
